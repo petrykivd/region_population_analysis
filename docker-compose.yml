@@ -5,11 +5,27 @@ services:
     build:
       context: .
     restart: always
-    command: /bin/bash -c "python3 wait_for_db.py && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    command: /bin/bash -c "python3 wait_for_db.py & uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
     ports:
       - "8000:8000"
     volumes:
       - ./:/app
+    depends_on:
+      - db
+
+  get_data:
+    env_file: .env
+    build:
+      context: .
+    command: /bin/bash -c "python3 wait_for_db.py && python3 data_parser.py"
+    depends_on:
+      - db
+
+  print_data:
+    env_file: .env
+    build:
+      context: .
+    command: /bin/bash -c "python3 wait_for_db.py && python3 data_printer.py"
     depends_on:
       - db
 
