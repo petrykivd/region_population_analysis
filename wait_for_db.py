@@ -35,9 +35,9 @@ def main():
     while not check_db_connection(db_host, db_port, db_user, db_password, db_name):
         retries += 1
         if retries >= max_retries:
-            print("Unable to connect to the database after {} attempts. Exiting.".format(max_retries))
+            print(f"Unable to connect to the database after {max_retries} attempts. Exiting.")
             return
-        print("Unable to connect to the database. Retrying attempt #{}".format(retries))
+        print(f"Trying to connect to the database. Trying attempt #{retries}")
         time.sleep(5)
 
     try:
