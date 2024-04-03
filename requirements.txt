@@ -9,7 +9,6 @@ attrs==23.2.0
 beautifulsoup4==4.12.3
 click==8.1.7
 exceptiongroup==1.2.0
-fastapi==0.110.1
 frozenlist==1.4.1
 greenlet==3.0.3
 h11==0.14.0

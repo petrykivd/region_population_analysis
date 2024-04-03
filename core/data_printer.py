@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from db import engine
+from db.db import engine
 
 
 with engine.connect() as con:
@@ -47,4 +47,4 @@ with engine.connect() as con:
         print("Population of the Largest Country in the Region:", row[3])
         print("Smallest Country in the Region:", row[4])
         print("Population of the Smallest Country in the Region:", row[5])
-        print(f"{'***' * 50}")
+        print(f"{'***' * 45}")

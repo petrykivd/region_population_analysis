@@ -1,14 +1,15 @@
 import asyncio
+import os
 
 import aiohttp
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 from sqlalchemy import insert
 
-import config
-from db import Session
-from models import Country
+from db.db import Session
+from db.models import Country
 
-SOURCE_URL = config.SOURCE_URL
+load_dotenv()
 
 
 async def fetch(url):
@@ -19,7 +20,7 @@ async def fetch(url):
 
 def main():
     session = Session()
-    url = SOURCE_URL
+    url = os.environ.get("DATA_SOURCE_URL")
     html = asyncio.run(fetch(url))
     soup = BeautifulSoup(html, 'html.parser')
     table = soup.find('table', class_='wikitable')
@@ -37,7 +38,7 @@ def main():
             continue
     session.commit()
     session.close()
-    print(f"{'***'* 20} Parsed successfully {'***C'* 20}")
+    print(f"{'***'* 20} Parsed successfully {'***'* 20}")
 
 
 if __name__ == "__main__":
