@@ -40,7 +40,14 @@ def main():
         print("Unable to connect to the database. Retrying attempt #{}".format(retries))
         time.sleep(5)
 
-    print("Database is available. ")
+    try:
+        subprocess.run(["alembic", "upgrade", "head"])
+        time.sleep(2)
+    except subprocess.CalledProcessError as e:
+        print("Error while performing database migration:", e)
+        return
+
+    print(f"{'***' * 20} Database is available! {'***' * 20}")
 
 
 if __name__ == "__main__":
