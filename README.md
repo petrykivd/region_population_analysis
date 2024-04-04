@@ -43,7 +43,7 @@ git clone https://github.com/petrykivd/region_population_analysis
 <details>
 <summary>Parameters for .env file:</summary>
 
-- **DATA_SOURCE_URL**: `Source link for parser`
+- **SOURCE**: `Source "wiki" or "statisticstimes"`
 - **POSTGRES_DB**: `Your Postgres DB`
 - **POSTGRES_USER**: `Your Postgres User`
 - **POSTGRES_PASSWORD**: `Your password in DB`
