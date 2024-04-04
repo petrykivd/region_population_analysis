@@ -21,20 +21,23 @@ async def fetch(url):
 def main():
     session = Session()
     source = os.environ.get('SOURCE')
+    if source not in ["wiki", "statisticstimes"]:
+        raise Exception("Unknown source for parsing.")
     url = os.environ.get("DATA_SOURCE_URL")
     html = asyncio.run(fetch(url))
     soup = BeautifulSoup(html, 'html.parser')
+
+    table = soup.find("table", id="table_id")
+    rows = table.find_all("tr")
+    population_col = 1
+    region_col = -1
 
     if source == "wiki":
         table = soup.find('table', class_='wikitable')
         rows = table.find_all('tr')[2:]
         population_col = 2
         region_col = 4
-    else:
-        table = soup.find("table", id="table_id")
-        rows = table.find_all("tr")
-        population_col = 1
-        region_col = -1
+
     for row in rows:
         try:
             columns = row.find_all('td')
