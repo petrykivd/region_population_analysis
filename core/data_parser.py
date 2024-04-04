@@ -20,20 +20,32 @@ async def fetch(url):
 
 def main():
     session = Session()
+    source = os.environ.get('SOURCE')
     url = os.environ.get("DATA_SOURCE_URL")
     html = asyncio.run(fetch(url))
     soup = BeautifulSoup(html, 'html.parser')
-    table = soup.find('table', class_='wikitable')
-    rows = table.find_all('tr')[2:]
 
+    if source == "wiki":
+        table = soup.find('table', class_='wikitable')
+        rows = table.find_all('tr')[2:]
+        population_col = 2
+        region_col = 4
+    else:
+        table = soup.find("table", id="table_id")
+        rows = table.find_all("tr")
+        population_col = 1
+        region_col = -1
     for row in rows:
         try:
             columns = row.find_all('td')
-            country_name = columns[0].text.strip()
-            population_2023 = int(columns[2].text.strip().replace(',', ''))
-            region = columns[4].text.strip()
-            stmt = insert(Country).values(name=country_name, population=population_2023, region=region)
-            session.execute(stmt)
+            if "world" in row.text.lower():
+                break
+            if len(columns) >= 3:
+                country_name = columns[0].text.strip()
+                population = int(columns[population_col].text.strip().replace(',', ''))
+                region = columns[region_col].text.strip()
+                stmt = insert(Country).values(name=country_name, population=population, region=region)
+                session.execute(stmt)
         except ValueError:
             continue
     session.commit()
